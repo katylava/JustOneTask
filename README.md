@@ -43,6 +43,10 @@ until they are done. If there are multiple tasks due today, or overdue tasks,
 the app should have the same behavior as when there are multiple tasks with the
 same urgency.
 
+### Single-occurrence tasks
+
+Need to think about this.
+
 ### Users
 
 Simple user-task relationship. Users should only be able to see their own tasks.
