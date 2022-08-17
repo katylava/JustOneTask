@@ -191,3 +191,11 @@ case, if the most urgent task should only be shown on Sunday, and it is not
 Sunday, the next most urgent task should be displayed on the main screen.
 
 Constrained tasks should still increment their urgency every day.
+
+### V6 - Non-linear urgency calculations
+
+In addition to the default linear function to calculate urgency, the user
+should be able to select an easing function. At the very least there should be
+one altertive, and it should be an ease-in function.
+
+Big maybe on this one because I don't know if it's necessary.
