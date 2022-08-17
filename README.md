@@ -14,13 +14,32 @@ The app should calculate the urgency of the task by comparing how long it's been
 since last completed to the period of time between how often they'd like to do
 it, and how often it's urgent.
 
+In pseudocode, something like:
+
+```
+ideal_date = last_completed_date + ideal_frequency_interval
+urgent_date = last_completed_date + urgent_frequency_interval
+daily_urgency_value = 1 / (urgent_date - ideal_date)
+days_since_ideal_date = current_date - ideal_date
+urgency_value = daily_urgency_value * days_since_ideal_date
+
+# if the ideal date is in the future, then days_since_ideal_date will be a
+# negative number, so urgency_value will be less than 0
+if urgency_value < 0 then urgency_value = null
+```
+
+_Potentially instead of asking for how frequently a task becomes urgent, we
+might ask how long after the ideal date it becomes urgent. Depends on which
+concept is easier to convey to the user._
+
 So, for the bed sheets, if it hasn't yet been a week, it's urgency should be
 null, since it's not even a candidate for showing up as the most urgent task.
 At one week, the urgency should be 0, but by the time it's been two weeks, the
 urgency should be 1. At 9 days the urgency shuld be between 0 and 1 -- it
 should be 2/7. In other words, each day should add 1/7 to the urgency value, or
 1 divided by the number of days between "would like to do" and "now it's
-urgent". After 2 weeks, the app should keep adding 1/7 for every day.
+urgent". After 2 weeks, the app should keep adding 1/7 for every day. 1/7 in
+this case would be the daily urgency value.
 
 If there are multiple tasks with the same urgency, there should be a visual
 indicator of this, and the user should be able to choose which one they want
@@ -43,7 +62,7 @@ until they are done. If there are multiple tasks due today, or overdue tasks,
 the app should have the same behavior as when there are multiple tasks with the
 same urgency.
 
-### Single-occurrence tasks
+### Non-repeating tasks
 
 Need to think about this.
 
@@ -85,10 +104,26 @@ tags which you can filter by as well.
 
 Clicking on a task should take you to the task edit screen.
 
+There should be a button to create a task which takes you to the task create
+screen.
+
 #### Task edit
 
 The user should be able to edit any task property, including last completed
-date. When a task is edited the urgency should be recalculated.
+date. When a task is edited the urgency should be recalculated, unless the user
+manually edited the urgency.
+
+To edit the urgency, the the app should allow the user to click up or down
+errors which increment or decrement by the daily urgency value.
+
+Daily calculations of urgency should add the daily urgency value to the current
+urgency value. They should not recalculate from scratch, otherwise the urgency
+would be reset if it was manually edited.
+
+#### Task create
+
+Like the task edit screen, but the field for last completed date should have a
+different label, like "When do you estimate you last did this task?".
 
 #### Options
 
@@ -151,7 +186,7 @@ user ahead of them.
 ### V5 - Constrained tasks
 
 The user should be able configure tasks to only show up as the top task on
-certain days of the week, days of the month, or months of the year. In this
+certain days of the week, days of the month, months of the year, etc. In this
 case, if the most urgent task should only be shown on Sunday, and it is not
 Sunday, the next most urgent task should be displayed on the main screen.
 
